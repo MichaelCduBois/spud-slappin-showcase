@@ -26,7 +26,7 @@ jobs:
       - name: Prepare Node Environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.12.1
+          node-version: 18.17.1
 
       - name: Install Spud Slappin' Dependencies
         run: npm ci
