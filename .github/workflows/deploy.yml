@@ -1,0 +1,49 @@
+name: Publish Spud Slappin' Showcase GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy-github-pages:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+
+    steps:
+      - name: Checkout Spud Slappin' Repo
+        uses: actions/checkout@v3
+
+      - name: Prepare Node Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.1
+
+      - name: Install Spud Slappin' Dependencies
+        run: npm ci
+
+      - name: Build Spud Slappin' Page
+        run: |
+          npm run build
+          touch build/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./build"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
